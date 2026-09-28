@@ -460,7 +460,17 @@
       </array>
     </config-file>
 
-    <dependency id="com.googlemaps.ios" url="https://github.com/mapsplugin/cordova-plugin-googlemaps-sdk"  />
+    <!-- The Maps SDK comes from CocoaPods rather than the com.googlemaps.ios
+         plugin, whose 3.9.0 fat frameworks have no arm64 simulator slice.
+         9.4.0 is the last CocoaPods release and still supports iOS 15. -->
+    <podspec>
+      <config>
+        <source url="https://cdn.cocoapods.org/" />
+      </config>
+      <pods use-frameworks="false">
+        <pod name="GoogleMaps" spec="9.4.0" />
+      </pods>
+    </podspec>
 
 <!--
     <hook type="before_platform_add" src="src/ios/check_sdk_version.js"/>

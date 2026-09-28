@@ -1007,7 +1007,16 @@
 }
 
 -(UIImage *)loadImageFromGoogleMap:(NSString *)fileName {
-  NSString *imagePath = [[NSBundle bundleWithIdentifier:@"com.google.GoogleMaps"] pathForResource:fileName ofType:@"png"];
+  NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.google.GoogleMaps"];
+  if (bundle == nil) {
+    // The CocoaPods SDK ships its images as
+    // GoogleMapsResources.bundle/GoogleMaps.bundle inside the app, not as a
+    // framework bundle with that identifier.
+    NSString *resourcesPath = [[NSBundle mainBundle] pathForResource:@"GoogleMapsResources" ofType:@"bundle"];
+    NSString *mapsPath = [[NSBundle bundleWithPath:resourcesPath] pathForResource:@"GoogleMaps" ofType:@"bundle"];
+    bundle = [NSBundle bundleWithPath:mapsPath];
+  }
+  NSString *imagePath = [bundle pathForResource:fileName ofType:@"png"];
   return [[UIImage alloc] initWithContentsOfFile:imagePath];
 }
 
